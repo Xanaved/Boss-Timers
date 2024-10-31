@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Timer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        #timer {
+            font-size: 48px;
+            margin: 20px 0;
+        }
+        #status {
+            font-size: 24px;
+            margin: 20px 0;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .red {
+            color: red;
+        }
+        .orange {
+            color: orange;
+        }
+        .green {
+            color: green;
+        }
+    </style>
+</head>
+<body>
+    <h1>Odliczanie Czasu</h1>
+    <div id="timer">03:00:00</div>
+    <div id="status"></div>
+    <button onclick="startTimer()">Rozpocznij Timer</button>
+
+    <script>
+        let totalTime = 3 * 60 * 60; // 3 godziny w sekundach
+        let timerInterval;
+
+        function startTimer() {
+            clearInterval(timerInterval); // Zatrzymaj poprzedni timer, jeśli istnieje
+            totalTime = 3 * 60 * 60; // Resetuj do 3 godzin
+            updateTimerDisplay();
+
+            timerInterval = setInterval(() => {
+                if (totalTime > 0) {
+                    totalTime--;
+                    updateTimerDisplay();
+                } else {
+                    clearInterval(timerInterval);
+                    document.getElementById("status").innerText = "Zielony";
+                    document.getElementById("status").className = "green";
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            const hours = Math.floor(totalTime / 3600);
+            const minutes = Math.floor((totalTime % 3600) / 60);
+            const seconds = totalTime % 60;
+
+            const formattedTime = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+            document.getElementById("timer").innerText = formattedTime;
+
+            // Ustaw status
+            if (totalTime > 3600) { // Więcej niż 1 godzina
+                document.getElementById("status").innerText = "Czerwony";
+                document.getElementById("status").className = "red";
+            } else if (totalTime > 0) { // Mniej niż 1 godzina
+                document.getElementById("status").innerText = "Pomarańczowy";
+                document.getElementById("status").className = "orange";
+            }
+        }
+    </script>
+</body>
+</html>
